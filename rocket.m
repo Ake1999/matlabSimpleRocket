@@ -1,12 +1,22 @@
-function Ali=rocket(v,z,r,m,p)
+%drawing thrown sphere trajectory in fluids
+%board = rocket(v,a,r,m,d)
+% inputs:
+%   v: initial velocity(m/s)
+%   a: launching angle(deg)
+%   r: sphere radius(m)
+%   m: mass(kg)
+%   d: fluid density(kg/m^3)
+% output:
+%   rocket board(m)
+function Ali=rocket(v,a,r,m,d)
     g=9.8;
     cd=0.47;
     s=0.01;
     A=pi*(r^2);
-    c=0.5*p*A*cd;
-    z=z*pi/180;
-    v0x=v*cos(z);
-    v0y=v*sin(z);
+    drag=0.5*d*A*cd;
+    a=a*pi/180;
+    v0x=v*cos(a);
+    v0y=v*sin(a);
     t=zeros(1,numel(1:s:floor(2*(v0y/g))));
     px=t;
     py=t;
@@ -22,12 +32,12 @@ function Ali=rocket(v,z,r,m,p)
     py(1)=0;
     for i=1:numel(1:s:floor(5*(v0y/g)))
         t(i+1)=i*s;
-        fdx(i)=-(c*((vx(i))^2));
+        fdx(i)=-(drag*((vx(i))^2));
         ax(i)=(fdx(i)/m);
         if vy(i)>0
-            fdy(i)=-(c*((vy(i))^2));
+            fdy(i)=-(drag*((vy(i))^2));
         else
-            fdy(i)=(c*((vy(i))^2));
+            fdy(i)=(drag*((vy(i))^2));
         end
          ay(i)=(fdy(i)/m)-g;
          vx(i+1)=(ax(i)*s)+vx(i);
